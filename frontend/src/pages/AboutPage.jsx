@@ -45,7 +45,7 @@ export default function AboutPage() {
         </p>
         <div className="flex gap-3 mt-6">
           <a
-            href="https://explain-plan-vision.vercel.app/docs"
+            href="https://aqibniazi-explainplan-vision-api.hf.space/docs"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
@@ -54,7 +54,7 @@ export default function AboutPage() {
             API Docs
           </a>
           <a
-            href="https://explain-plan-vision.vercel.app/redoc"
+            href="https://aqibniazi-explainplan-vision-api.hf.space/redoc"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-outline"
