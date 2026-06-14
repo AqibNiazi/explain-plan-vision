@@ -35,17 +35,30 @@ export default function AboutPage() {
       <div className="mb-14 fade-up">
         <p className="section-label mb-2">About</p>
         <h1 className="section-title text-4xl mb-4">ExplainPlan Vision</h1>
-        <p className="text-base max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-          An end-to-end neuro-symbolic pipeline that combines deep vision, gradient-based
-          explanations, first-order logic reasoning, and human-adaptive planning to diagnose
-          and treat plant leaf disease.
+        <p
+          className="text-base max-w-2xl leading-relaxed"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          An end-to-end neuro-symbolic pipeline that combines deep vision,
+          gradient-based explanations, first-order logic reasoning, and
+          human-adaptive planning to diagnose and treat plant leaf disease.
         </p>
         <div className="flex gap-3 mt-6">
-          <a href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer" className="btn-primary">
+          <a
+            href="https://explain-plan-vision.vercel.app/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+          >
             <ExternalLink size={13} />
             API Docs
           </a>
-          <a href="http://localhost:8000/redoc" target="_blank" rel="noopener noreferrer" className="btn-outline">
+          <a
+            href="https://explain-plan-vision.vercel.app/redoc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-outline"
+          >
             ReDoc ↗
           </a>
         </div>
@@ -74,10 +87,18 @@ export default function AboutPage() {
               className="panel p-5 flex gap-5 group hover:border-[var(--border-bright)] transition-all"
             >
               <div className="flex flex-col items-center gap-2 shrink-0">
-                <span className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>{n}</span>
+                <span
+                  className="font-mono text-xs"
+                  style={{ color: "var(--text-muted)" }}
+                >
+                  {n}
+                </span>
                 <div
                   className="w-9 h-9 flex items-center justify-center"
-                  style={{ background: `${color}18`, border: `1px solid ${color}44` }}
+                  style={{
+                    background: `${color}18`,
+                    border: `1px solid ${color}44`,
+                  }}
                 >
                   <Icon size={16} style={{ color }} />
                 </div>
@@ -85,11 +106,17 @@ export default function AboutPage() {
               <div>
                 <h3
                   className="font-display font-bold text-base mb-2"
-                  style={{ color: "var(--text-primary)", fontFamily: "var(--font-display)" }}
+                  style={{
+                    color: "var(--text-primary)",
+                    fontFamily: "var(--font-display)",
+                  }}
                 >
                   {title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   {desc}
                 </p>
               </div>
@@ -103,33 +130,52 @@ export default function AboutPage() {
         <p className="section-label mb-4">API Endpoints</p>
         <div className="flex flex-col gap-2">
           {[
-            ["GET",    "/api/v1/health",          "Server liveness and model status"],
-            ["POST",   "/api/v1/predict",          "Disease classification only"],
-            ["POST",   "/api/v1/explain",          "Grad-CAM++ heatmap only"],
-            ["POST",   "/api/v1/plan",             "Treatment plan only"],
-            ["POST",   "/api/v1/full-analysis",    "Complete 10-stage pipeline (primary)"],
-            ["GET",    "/api/v1/memory",           "Temporal memory state"],
-            ["DELETE", "/api/v1/memory",           "Clear temporal memory"],
-            ["GET",    "/api/v1/knowledge-graph",  "Knowledge graph metadata"],
+            ["GET", "/api/v1/health", "Server liveness and model status"],
+            ["POST", "/api/v1/predict", "Disease classification only"],
+            ["POST", "/api/v1/explain", "Grad-CAM++ heatmap only"],
+            ["POST", "/api/v1/plan", "Treatment plan only"],
+            [
+              "POST",
+              "/api/v1/full-analysis",
+              "Complete 10-stage pipeline (primary)",
+            ],
+            ["GET", "/api/v1/memory", "Temporal memory state"],
+            ["DELETE", "/api/v1/memory", "Clear temporal memory"],
+            ["GET", "/api/v1/knowledge-graph", "Knowledge graph metadata"],
           ].map(([method, path, desc]) => (
             <div
               key={path}
               className="flex items-center gap-4 px-3 py-2"
-              style={{ background: "var(--bg-surface)", border: "1px solid var(--border-dim)" }}
+              style={{
+                background: "var(--bg-surface)",
+                border: "1px solid var(--border-dim)",
+              }}
             >
               <span
                 className="font-mono text-xs w-14 shrink-0"
                 style={{
                   color:
-                    method === "GET" ? "var(--accent-green)" :
-                    method === "POST" ? "var(--accent-cyan)" :
-                    "var(--accent-red)",
+                    method === "GET"
+                      ? "var(--accent-green)"
+                      : method === "POST"
+                        ? "var(--accent-cyan)"
+                        : "var(--accent-red)",
                 }}
               >
                 {method}
               </span>
-              <span className="font-mono text-xs" style={{ color: "var(--text-primary)" }}>{path}</span>
-              <span className="font-mono text-xs ml-auto hidden md:block" style={{ color: "var(--text-muted)" }}>{desc}</span>
+              <span
+                className="font-mono text-xs"
+                style={{ color: "var(--text-primary)" }}
+              >
+                {path}
+              </span>
+              <span
+                className="font-mono text-xs ml-auto hidden md:block"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {desc}
+              </span>
             </div>
           ))}
         </div>

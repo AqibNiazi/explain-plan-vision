@@ -6,7 +6,10 @@ export default function Footer() {
     <footer className="relative z-10 border-t border-[var(--border-dim)] mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <FlaskConical size={14} className="text-[var(--accent-cyan)] opacity-60" />
+          <FlaskConical
+            size={14}
+            className="text-[var(--accent-cyan)] opacity-60"
+          />
           <span className="font-mono text-xs text-[var(--text-muted)]">
             ExplainPlan Vision — Neuro-Symbolic Visual Planning
           </span>
@@ -16,7 +19,7 @@ export default function Footer() {
             EfficientNet-B0 · Grad-CAM++ · Symbolic Reasoning
           </span>
           <a
-            href="http://localhost:8000/docs"
+            href="https://explain-plan-vision.vercel.app/docs"
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-xs text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors"
