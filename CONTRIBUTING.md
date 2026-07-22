@@ -2,8 +2,6 @@
 
 Thank you for your interest in contributing. This document outlines the process for contributing code, research extensions, bug reports, and documentation improvements.
 
----
-
 ## Ways to Contribute
 
 ### Bug Reports
@@ -17,9 +15,7 @@ Open a GitHub Issue with:
 If you are extending the system for research (new XAI method, new reasoning rules, new plant classes), open an Issue first to discuss scope before opening a PR. This avoids duplicate effort.
 
 ### Documentation
-Corrections to `docs/research_notes/` are always welcome — especially corrections to experimental findings or citations.
-
----
+Corrections to `docs/research_notes/` are always welcome especially corrections to experimental findings or citations.
 
 ## Development Setup
 
@@ -39,22 +35,18 @@ cd frontend
 npm install && npm run dev
 ```
 
----
-
 ## Code Style
 
 **Python (backend):**
 - Follow PEP 8
 - Type hints on all public functions
 - Docstrings on all classes and non-trivial functions
-- No bare `except:` — always catch specific exceptions
+- No bare `except:` always catch specific exceptions
 
 **JavaScript (frontend):**
-- Functional components only — no class components
+- Functional components only no class components
 - Custom hooks for all API state (`useAnalysis`, `useHealth`)
 - No inline styles — use CSS variables from `index.css`
-
----
 
 ## Pull Request Process
 
@@ -67,17 +59,13 @@ npm install && npm run dev
    - Which research phase it belongs to (1–6)
    - Any relevant test results or accuracy numbers
 
----
-
 ## Research Contribution Guidelines
 
 If your contribution includes new experimental results:
 
 - Add a research note to `docs/research_notes/` following the existing format
 - Include the metric, the dataset split it was measured on, and the measurement method
-- Do not overwrite existing phase findings — add a new dated section
-
----
+- Do not overwrite existing phase findings add a new dated section
 
 ## Licence
 
