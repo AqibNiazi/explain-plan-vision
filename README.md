@@ -1,332 +1,185 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/PyTorch-2.2-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
-<img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
-<img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black"/>
-<img src="https://img.shields.io/badge/TailwindCSS-4.0-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
-<img src="https://img.shields.io/badge/Docker-Deployed-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
-<img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge"/>
+<br/>
+
+<img src="docs/diagrams/system_architecture.svg" width="680" alt="ExplainPlan Vision System Architecture"/>
 
 <br/><br/>
 
 # ExplainPlan Vision
 
-### _An Explainable Neuro-Symbolic Visual Planning Agent for Plant Disease Diagnosis_
+**An Explainable Neuro-Symbolic Visual Planning Agent for Plant Disease Diagnosis**
 
 <br/>
 
-> **Research Note:** This system is developed for academic research purposes.
-> All disease classifications and treatment plans should be validated by a qualified agronomist before operational use.
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.2-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)](https://pytorch.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Deployed-FFD21E?style=flat-square&logo=huggingface&logoColor=black)](https://huggingface.co/spaces/aqibniazi/explainplan-vision-api)
+[![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
+
+<br/>
+
+[**Live Demo**](https://explain-plan-frontend.vercel.app) · [**API**](https://aqibniazi-explainplan-vision-api.hf.space/docs) · [**Training Notebook**](https://www.kaggle.com) · [**Technical Report**](docs/TECHNICAL_REPORT.md)
+
+<br/>
 
 </div>
 
-## Table of Contents
+---
 
-- [Overview](#overview)
-- [Live Demo](#live-demo)
-- [Research Motivation](#research-motivation)
-- [System Architecture](#system-architecture)
-- [The 10-Stage Pipeline](#the-10-stage-pipeline)
-- [Dataset](#dataset)
-- [Vision Model](#vision-model)
-- [Explainability — Grad-CAM++](#explainability--grad-cam)
-- [Neuro-Symbolic Reasoning](#neuro-symbolic-reasoning)
-- [Adaptive Planning](#adaptive-planning)
-- [Temporal Memory](#temporal-memory)
-- [Performance](#performance)
-- [Project Structure](#project-structure)
-- [Installation & Setup](#installation--setup)
-- [API Reference](#api-reference)
-- [Deployment](#deployment)
-- [Research Roadmap](#research-roadmap)
-- [Citation](#citation)
-- [License](#license)
+## What This Is
 
-## Overview
+Most plant disease AI systems stop at classification. Upload an image, get a label. This project goes further.
 
-**ExplainPlan Vision** is a full-stack research system that diagnoses plant leaf disease from a single image and produces a complete, traceable explanation of every decision made — from the pixel level to the treatment plan.
+ExplainPlan Vision is a **neuro-symbolic reasoning agent** that takes a single leaf photograph and produces: a disease diagnosis, a spatial explanation of *where* on the leaf the evidence was found, a symbolic reasoning trace showing *why* that evidence implies a specific treatment, and an adaptive, step-numbered treatment plan — all in a single API call, in about 2 seconds, on a CPU.
 
-The system integrates five distinct AI paradigms into a single inference pipeline:
+The system is built across five research phases completed over several months — from training the vision backbone on Kaggle to deploying the full stack on HuggingFace Spaces and Vercel. Every layer is custom-built: the reasoning engine, the knowledge graph, the planning engine, the counterfactual analyser, the temporal memory, and the three-audience explanation layer.
 
-| Paradigm                  | Component                      | Role                                                |
-| ------------------------- | ------------------------------ | --------------------------------------------------- |
-| Deep Learning             | EfficientNet-B0                | Visual classification of 15 disease classes         |
-| Gradient-Based XAI        | Grad-CAM++                     | Spatial explanation of _where_ the model looks      |
-| Symbolic AI               | First-Order Logic Facts        | Grounding neural outputs in verifiable propositions |
-| Knowledge Graph Reasoning | NetworkX + 20+ Inference Rules | Deriving urgency, spread risk, and treatment class  |
-| Adaptive Planning         | 6-Context Plan Engine          | Generating a numbered, annotated treatment plan     |
-
-A single POST to `/api/v1/full-analysis` returns all of these simultaneously — prediction, heatmap, reasoning trace, adaptive plan, counterfactual analysis, decision tree look-ahead, temporal trend, and three audience-specific natural language explanations.
-
-**What distinguishes this project from a standard image classifier:**
-
-1. The neural model output is _grounded_ — converted to verifiable symbolic facts before any planning decision is made.
-2. The reasoning is _traceable_ — every treatment step references the inference rule that triggered it.
-3. The explanations are _adaptive_ — different outputs for a farmer, an agronomist, and a researcher.
-4. The system _learns over time_ — temporal memory tracks disease progression across sessions and flags worsening trends.
-
-## Live Demo
-
-| Service                 | URL                                                    |
-| ----------------------- | ------------------------------------------------------ |
-| Frontend (Vercel)       | https://explain-plan-frontend.vercel.app               |
-| Backend API (HF Spaces) | https://aqibniazi-explainplan-vision-api.hf.space      |
-| Swagger UI              | https://aqibniazi-explainplan-vision-api.hf.space/docs |
-
-## Research Motivation
-
-Plant disease causes an estimated **20–40% of global crop yield loss** annually (FAO, 2021). Early, accurate, and actionable diagnosis is critical — but it requires specialist knowledge that most smallholder farmers lack access to.
-
-Deep learning models have demonstrated strong performance on plant disease classification, but two fundamental gaps remain:
-
-**Gap 1 — Explainability.** A model that says _"Late Blight, 97% confidence"_ provides no actionable information about _why_ that conclusion was reached, _which regions_ of the leaf were diagnostic, or _how certain_ the model is about the spatial evidence.
-
-**Gap 2 — Planning.** Classification is not treatment. A farmer needs to know _what to do_, _how urgently_, _in what order_, and _what would happen_ if they wait.
-
-**ExplainPlan Vision addresses both gaps** by combining a vision backbone with Grad-CAM++ spatial explanation, a neuro-symbolic reasoning layer that derives urgency and treatment class from verifiable facts, and an adaptive planning engine that produces a prioritised, annotated treatment plan.
-
-The core research contribution is the _grounding pipeline_ — the explicit conversion of neural outputs into first-order logic facts before any symbolic inference is performed. This is what makes the system's reasoning auditable in a way that a pure neural approach cannot be.
-
-## System Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         CLIENT LAYER                            │
-│   React 19 + Tailwind CSS 4 + Recharts + Lucide + Axios         │
-│   ┌──────────┐  ┌──────────────┐  ┌────────────┐  ┌─────────┐  │
-│   │ HomePage │  │ AnalyzePage  │  │ MemoryPage │  │  About  │  │
-│   └──────────┘  └──────────────┘  └────────────┘  └─────────┘  │
-└─────────────────────────┬───────────────────────────────────────┘
-                          │ HTTP REST  (multipart/form-data · JSON)
-┌─────────────────────────▼───────────────────────────────────────┐
-│                         API LAYER                               │
-│   FastAPI 0.115 + Pydantic v2 + Uvicorn                         │
-│   8 endpoints · singleton Orchestrator · Pydantic schemas       │
-└──────────────────┬──────────────────────────────────────────────┘
-                   │
-       ┌───────────┴────────────┐
-       │     ORCHESTRATOR       │
-       │  Initialises engines   │
-       │  at startup (once)     │
-       └─┬──────┬──────┬──────┬─┘
-         │      │      │      │
-    Vision   XAI  Reasoning Planning
-    Engine  Engine  Engine   Engine
-```
-
-See [`docs/architecture/system_overview.md`](docs/architecture/system_overview.md) for the complete data-flow diagram.
-
-## The 10-Stage Pipeline
-
-Every call to `/api/v1/full-analysis` executes all ten stages in sequence:
-
-| Stage | Component                   | Output                                          |
-| ----- | --------------------------- | ----------------------------------------------- |
-| 01    | EfficientNet-B0 Vision      | Disease class, confidence, top-3, severity      |
-| 02    | Grad-CAM++ XAI              | Heatmap (base64), focus score, entropy, spread  |
-| 03    | Symbolic Fact Extraction    | First-order logic predicates with confidence    |
-| 04    | Knowledge Graph Inference   | Urgency score, spread risk, treatment class     |
-| 05    | Temporal Memory Update      | Trend analysis (improving / stable / worsening) |
-| 06    | Adaptive Plan Generation    | Numbered steps, 6 context mechanisms            |
-| 07    | Counterfactual Analysis     | 4 what-if scenarios with plan deltas            |
-| 08    | Decision Tree Look-ahead    | Expected urgency via probabilistic branching    |
-| 09    | Human-Adaptive Explanations | Farmer / agronomist / researcher narratives     |
-| 10    | Unified Response Assembly   | Single JSON object, all fields                  |
-
-## Dataset
-
-| Property     | Details                                                                               |
-| ------------ | ------------------------------------------------------------------------------------- |
-| Name         | PlantVillage Disease Classification Dataset                                           |
-| Source       | [Kaggle — PlantVillage Dataset](https://www.kaggle.com/datasets/emmarex/plantdisease) |
-| Total Images | ~54,000 leaf images                                                                   |
-| Classes      | 15 disease + healthy categories                                                       |
-| Splits       | 80% train / 10% val / 10% test                                                        |
-
-**Class Distribution (selected):**
-
-| Class                 | Category  |
-| --------------------- | --------- |
-| Tomato Late Blight    | Fungal    |
-| Tomato Early Blight   | Fungal    |
-| Tomato Leaf Mold      | Fungal    |
-| Tomato Bacterial Spot | Bacterial |
-| Potato Early Blight   | Fungal    |
-| Potato Late Blight    | Fungal    |
-| Corn Common Rust      | Fungal    |
-| Pepper Bacterial Spot | Bacterial |
-| Tomato Healthy        | Healthy   |
-| _(+ 6 more)_          |           |
-
-**Preprocessing Pipeline:**
-
-```python
-transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize(
-        mean=[0.485, 0.456, 0.406],   # ImageNet statistics
-        std =[0.229, 0.224, 0.225]
-    )
-])
-```
-
-Training augmentations: random horizontal flip, random rotation (±15°), colour jitter.
-
-## Vision Model
-
-**Architecture:** EfficientNet-B0 (Tan & Le, 2019) with transfer learning from ImageNet weights.
-
-```
-EfficientNet-B0 Backbone (ImageNet pre-trained)
-    └── MBConv blocks × 7
-            └── Global Average Pooling
-                    └── Dropout(0.2)
-                            └── Linear(1280 → 15)  ← fine-tuned classifier head
-```
-
-**Training Configuration:**
-
-| Hyperparameter      | Value                         |
-| ------------------- | ----------------------------- |
-| Optimiser           | Adam                          |
-| Learning Rate       | 1e-4 (with ReduceLROnPlateau) |
-| Epochs              | 25                            |
-| Batch Size          | 32                            |
-| Loss Function       | CrossEntropyLoss              |
-| Pre-trained Weights | ImageNet (torchvision)        |
-| Platform            | Kaggle (GPU T4)               |
-
-**Why EfficientNet-B0 over ResNet50:**
-EfficientNet-B0 achieves comparable accuracy to ResNet50 with 5.3M parameters vs 25.6M, making it substantially more suitable for CPU inference in the deployed HuggingFace Space without sacrificing classification performance.
-
-## Explainability — Grad-CAM++
-
-Grad-CAM++ (Chattopadhay et al., 2018) extends Grad-CAM by using a weighted combination of second-order gradients to produce more precise localisation, particularly for multiple object instances in a single image.
-
-**Weighting formula:**
-
-$$
-\alpha_{ij}^{kc} = \frac{\frac{\partial^2 y^c}{(\partial A_{ij}^k)^2}}{2\frac{\partial^2 y^c}{(\partial A_{ij}^k)^2} + \sum_{a,b} A_{ab}^k \frac{\partial^3 y^c}{(\partial A_{ij}^k)^3}}
-$$
-
-**Spatial statistics extracted from heatmap:**
-
-| Statistic            | Definition                                     | Interpretation                               |
-| -------------------- | ---------------------------------------------- | -------------------------------------------- |
-| `infection_spread`   | Fraction of heatmap above activation threshold | localised / moderate / widespread            |
-| `focus_score`        | Peak-to-mean activation ratio                  | Higher = model more certain about location   |
-| `activation_entropy` | Shannon entropy of normalised heatmap          | Lower = sharper, more confident localisation |
-
-**Implementation note:** `register_full_backward_hook` is used throughout. GradCAM hooks are always removed in a `finally` block to prevent state leakage between concurrent requests.
-
-## Neuro-Symbolic Reasoning
-
-The reasoning layer converts the neural model's continuous outputs into discrete, verifiable symbolic facts, then applies inference rules over a disease knowledge graph.
-
-### Symbolic Fact Extraction
-
-```python
-# Example facts extracted from a Late Blight prediction
-[
-  {"predicate": "disease_detected",   "arguments": ["tomato_late_blight"], "confidence": 0.97},
-  {"predicate": "confidence_level",   "arguments": ["high"],               "confidence": 0.97},
-  {"predicate": "severity_level",     "arguments": ["high"],               "confidence": 0.85},
-  {"predicate": "infection_spread",   "arguments": ["widespread"],         "confidence": 0.91},
-  {"predicate": "disease_type",       "arguments": ["fungal"],             "confidence": 1.00},
-  {"predicate": "focus_score",        "arguments": ["0.723"],              "confidence": 0.91},
-]
-```
-
-### Knowledge Graph Inference
-
-The disease knowledge graph is built with NetworkX. 20+ inference rules fire over the graph to derive:
-
-| Derived Fact         | Example                |
-| -------------------- | ---------------------- |
-| `urgency_score`      | 0.87 (continuous, 0–1) |
-| `urgency_level`      | `critical`             |
-| `spread_risk`        | `high`                 |
-| `treatment_class`    | `fungicide`            |
-| `requires_isolation` | `true`                 |
-| `rules_fired`        | 14                     |
-
-**Example rule (pseudocode):**
-
-```
-IF disease_type(X, fungal)
-AND severity_level(X, high)
-AND infection_spread(X, widespread)
-THEN urgency_level(X, critical) WITH confidence 0.95
-AND requires_isolation(X, true) WITH confidence 0.90
-```
-
-## Adaptive Planning
-
-The planning engine adapts treatment steps based on 6 simultaneous context mechanisms:
-
-| Mechanism                                            | Influence                                                      |
-| ---------------------------------------------------- | -------------------------------------------------------------- |
-| Disease type (fungal / bacterial / viral)            | Determines treatment class (fungicide / antibiotic / cultural) |
-| Infection spread (localised / moderate / widespread) | Scales isolation and containment steps                         |
-| Urgency score (continuous)                           | Determines step ordering and time constraints                  |
-| Seasonal modifier                                    | Adjusts chemical application frequency                         |
-| Severity level                                       | Adds or removes monitoring steps                               |
-| Temporal trend                                       | Escalates plan if worsening trend detected                     |
-
-**Example plan action:**
-
-```json
-{
-  "step": 1,
-  "action": "Immediately isolate affected plants to prevent spread to neighbouring rows.",
-  "category": "containment",
-  "urgency": "critical",
-  "time_constraint": "within 24 hours"
-}
-```
-
-### Counterfactual Analysis
-
-4 what-if scenarios are computed for every analysis:
-
-| Scenario            | Description                                              |
-| ------------------- | -------------------------------------------------------- |
-| `early_detection`   | How would the plan differ if caught 2 weeks earlier?     |
-| `isolated_spread`   | What if infection were localised rather than widespread? |
-| `critical_severity` | What if severity were at maximum?                        |
-| `healthy_baseline`  | What would a healthy plant's plan look like?             |
-
-Each scenario returns `plan_delta` (step count difference) and `cf_urgency` vs `original_urgency`.
+> **Research disclaimer:** Developed for academic research. Treatment recommendations should be validated by a qualified agronomist before operational use.
 
 ---
 
-## Temporal Memory
+## The Core Contribution
 
-The system maintains a sliding-window memory of past analyses for the same plant/session. On each new analysis, trend detection compares the current observation against history:
+The piece that separates this from a classifier wrapped in an API is the **grounding pipeline** — an explicit conversion step that turns continuous neural network outputs into verifiable first-order logic facts before any planning decision is made.
 
-| Trend Field      | Values                         | Trigger                                 |
-| ---------------- | ------------------------------ | --------------------------------------- |
-| `severity_trend` | improving / stable / worsening | Change in severity score across window  |
-| `urgency_trend`  | improving / stable / worsening | Change in urgency_score across window   |
-| `spread_trend`   | improving / stable / worsening | Change in infection_spread category     |
-| `disease_stable` | boolean                        | Whether the same disease class persists |
+```
+EfficientNet-B0 outputs:   confidence=0.97,  spread_fraction=0.63
+                                    ↓  grounding
+Symbolic facts:            confidence_level(high, 0.97)
+                           infection_spread(widespread, 0.91)
+                           disease_type(fungal, 1.00)
+                                    ↓  20+ inference rules
+Derived inferences:        urgency_level(critical)
+                           requires_isolation(true)
+                           treatment_class(fungicide)
+                                    ↓  6-context adaptive planner
+Treatment plan:            Step 1 [CRITICAL] Isolate affected plants...
+                           Step 2 [HIGH]     Apply copper-based fungicide...
+```
 
-The `monitoring_interval` recommendation adjusts based on trend: daily if worsening, weekly if stable, bi-weekly if improving.
+An agronomist can inspect the symbolic facts and verify each one against the leaf image — without understanding the neural network at all. Every treatment step traces back to the inference rule that triggered it, which traces back to the symbolic fact, which traces back to the neural confidence value. The chain is walkable in either direction.
 
 ---
 
-## Performance
+## Screenshots
 
-| Metric                           | Value                  |
-| -------------------------------- | ---------------------- |
-| Top-1 Classification Accuracy    | 96.8%                  |
-| Top-3 Classification Accuracy    | 99.1%                  |
-| Model Parameters                 | 5.3M (EfficientNet-B0) |
-| Avg. Full-Analysis Latency (CPU) | ~2.1s                  |
-| Avg. GradCAM Generation Time     | ~0.8s                  |
-| Knowledge Graph Inference Time   | ~12ms                  |
-| API cold-start (HF Spaces)       | ~45s (model loading)   |
+### Analysis Interface
+
+<!-- Replace with actual screenshot -->
+![Analyze Page](docs/screenshots/analyze_page.png)
+
+### Grad-CAM Spatial Explanation
+
+<!-- Replace with actual screenshot -->
+![GradCAM Heatmap](docs/screenshots/gradcam_result.png)
+
+### Symbolic Reasoning Trace
+
+<!-- Replace with actual screenshot -->
+![Reasoning Panel](docs/screenshots/reasoning_panel.png)
+
+### Treatment Plan with Counterfactuals
+
+<!-- Replace with actual screenshot -->
+![Treatment Plan](docs/screenshots/treatment_plan.png)
+
+---
+
+## What One Analysis Returns
+
+A single POST to `/api/v1/full-analysis` runs ten stages and returns one JSON object:
+
+| Stage | What it produces |
+|-------|-----------------|
+| Vision (EfficientNet-B0) | Disease class, confidence, top-3 alternatives, severity |
+| Grad-CAM++ | Spatial heatmap (base64 PNG), focus score, activation entropy, infection spread |
+| Symbolic grounding | First-order logic facts extracted from neural outputs, each with source + confidence |
+| Knowledge graph inference | Urgency score, spread risk, treatment class — derived by 20+ rules over a NetworkX graph |
+| Temporal memory | Severity trend, urgency trend, spread trend across past sessions |
+| Adaptive planning | Numbered treatment steps, each tagged with category and urgency |
+| Counterfactual analysis | 4 what-if scenarios showing how the plan changes under different conditions |
+| Decision tree | Probabilistic look-ahead computing expected urgency across branching scenarios |
+| Audience-adaptive explanations | Three separate natural language summaries for a farmer, an agronomist, and a researcher |
+
+Everything above happens in approximately **2.1 seconds on CPU**.
+
+---
+
+## Results
+
+| Metric | Value |
+|--------|-------|
+| Top-1 Test Accuracy | **96.8%** |
+| Top-3 Test Accuracy | **99.1%** |
+| Full-Analysis Latency (CPU) | ~2.1s |
+| Model Parameters | 5.3M (EfficientNet-B0) |
+| Knowledge Graph Rules | 20+ inference rules |
+| Grad-CAM / SHAP Agreement (Spearman r) | 0.74 |
+| Training Dataset | PlantVillage — 54,000 images, 15 classes |
+
+---
+
+## Research Phases
+
+This project was built in five sequential research phases, each with its own Kaggle notebook:
+
+**Phase 1 — Vision Foundation**
+EfficientNet-B0 fine-tuned on PlantVillage. Selected over ResNet50 for 5× lower parameter count (5.3M vs 25.6M), making CPU deployment viable. Calibrated confidence outputs designed specifically for downstream symbolic grounding.
+
+**Phase 2 — Explainability Engine**
+Three XAI methods implemented and compared: Grad-CAM++ (deployed), SHAP GradientExplainer (notebook), LIME (notebook). Spatial statistics extracted from heatmaps — focus score, activation entropy, infection spread — feed directly into the Phase 4 reasoning engine as symbolic facts. Grad-CAM / SHAP agreement measured with Spearman correlation (r = 0.74) to validate spatial consistency across methods.
+
+**Phase 3 — Adaptive Planning**
+Six-context treatment plan engine. Plans are not templates — they adapt simultaneously to disease type, infection spread, urgency score, seasonal conditions, severity level, and temporal trend. Four counterfactual scenarios quantify the cost of delayed intervention (plan delta in step count). Probabilistic decision tree computes expected urgency via leaf-weighted averaging.
+
+**Phase 4 — Neuro-Symbolic Reasoning**
+The grounding pipeline. Neural outputs converted to first-order logic predicates before inference. NetworkX knowledge graph with 20+ rules derives urgency, treatment class, isolation requirements. Three audience-specific natural language explanations grounded in the verified reasoning trace — not generated from scratch.
+
+**Phase 5 — Full-Stack Deployment**
+FastAPI backend (8 endpoints, Pydantic v2, singleton orchestrator) deployed on HuggingFace Spaces via Docker. React 19 + Tailwind CSS 4 frontend deployed on Vercel. Temporal memory API with sliding-window trend detection across sessions.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Vision model | PyTorch 2.2, EfficientNet-B0, timm |
+| XAI | pytorch-grad-cam (Grad-CAM++), SHAP, LIME |
+| Reasoning | NetworkX, first-order logic fact extraction |
+| Backend | FastAPI 0.115, Pydantic v2, Uvicorn |
+| Frontend | React 19, Tailwind CSS 4, Vite, Recharts |
+| Deployment | Docker, HuggingFace Spaces, Vercel |
+| Training | Kaggle (GPU T4), PlantVillage dataset |
+
+---
+
+## Running Locally
+
+**Backend**
+```bash
+git clone https://github.com/AqibNiazi/ExplainPlan-Vision.git
+cd ExplainPlan-Vision/backend
+
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+
+# Place model weights in assets/
+cp best_model.pth ../assets/
+cp class_mappings.json ../assets/
+
+uvicorn backend.main:app --reload --port 8000
+# Swagger UI → http://localhost:8000/docs
+```
+
+**Frontend**
+```bash
+cd frontend
+npm install && npm run dev
+# → http://localhost:5173
+```
 
 ---
 
@@ -334,313 +187,80 @@ The `monitoring_interval` recommendation adjusts based on trend: daily if worsen
 
 ```
 ExplainPlan-Vision/
-│
-├── 📓 notebooks/
-│   ├── phase1_vision_foundation/       # EfficientNet training + evaluation
-│   ├── phase2_xai/                     # Grad-CAM++ + LIME + SHAP (offline)
-│   ├── phase3_planning/                # Adaptive plan engine prototyping
-│   └── phase4_neurosymbolic/           # KG construction + rule writing
-│
-├── ⚙️ backend/
-│   ├── main.py                         # FastAPI app factory + lifespan
-│   ├── config.py                       # Pydantic-settings: device, paths, CORS
-│   ├── api/
-│   │   └── routes.py                   # All 8 endpoints
-│   ├── vision/
-│   │   └── model.py                    # EfficientNet-B0 loader + inference
-│   ├── xai/
-│   │   └── gradcam.py                  # Grad-CAM++ + spatial statistics
-│   ├── reasoning/
-│   │   └── engine.py                   # Fact extraction + KG inference
-│   ├── planning/
-│   │   └── planner.py                  # Adaptive plan + counterfactuals
-│   ├── memory/
-│   │   └── temporal.py                 # Sliding-window memory + trends
-│   ├── services/
-│   │   └── orchestrator.py             # Singleton pipeline coordinator
-│   ├── schemas/
-│   │   └── responses.py                # Pydantic v2 response models
-│   └── utils/
-│       └── logger.py                   # Loguru setup
-│
-├── 🖥️ frontend/
-│   ├── src/
-│   │   ├── services/
-│   │   │   ├── apiClient.js            # Axios instance + endpoint map
-│   │   │   └── analysisService.js      # All API call functions
-│   │   ├── hooks/
-│   │   │   ├── useAnalysis.js          # Upload + result state management
-│   │   │   └── useHealth.js            # Backend status polling
-│   │   ├── pages/
-│   │   │   ├── HomePage.jsx            # Hero, feature grid, pipeline viz
-│   │   │   ├── AnalyzePage.jsx         # Upload + 10-stage result display
-│   │   │   ├── MemoryPage.jsx          # Temporal memory viewer
-│   │   │   └── AboutPage.jsx           # Pipeline docs + API reference
-│   │   ├── components/
-│   │   │   ├── analysis/               # PredictionCard, XAICard, ReasoningCard …
-│   │   │   ├── layout/                 # Navbar (live status), Footer
-│   │   │   └── ui/                     # ImageUploader, reusable primitives
-│   │   ├── layout/
-│   │   │   └── AppLayout.jsx
-│   │   ├── routes/
-│   │   │   └── AppRoutes.jsx
-│   │   └── utils/
-│   │       └── helpers.js
-│   ├── vite.config.js                  # Dev proxy: /api → backend
-│   └── package.json
-│
-├── 🐳 Dockerfile                       # HuggingFace Spaces deployment
-├── startup.py                          # Weight download at container startup
-├── assets/
-│   ├── best_model.pth                  # EfficientNet-B0 fine-tuned weights
-│   └── class_mappings.json             # Index → disease class mapping
-│
+├── notebooks/
+│   ├── phase1_vision_foundation/
+│   ├── phase2_xai/
+│   ├── phase3_planning/
+│   └── phase4_neurosymbolic/
+├── backend/
+│   ├── vision/          # EfficientNet-B0 inference
+│   ├── xai/             # Grad-CAM++ + spatial statistics
+│   ├── reasoning/       # Symbolic grounding + KG inference
+│   ├── planning/        # Adaptive plan + counterfactuals
+│   ├── memory/          # Temporal sliding-window store
+│   └── services/        # Singleton orchestrator
+├── frontend/
+│   └── src/
+│       ├── pages/       # Analyze, Memory, About, Home
+│       └── components/  # PredictionCard, XAICard, ReasoningCard...
 ├── docs/
-│   ├── architecture/
-│   │   └── system_overview.md          # Full data-flow diagrams
-│   └── research_notes/
-│       └── phase_roadmap.md            # Phase 1–7 roadmap with rationale
-│
-├── .gitignore
-├── LICENSE                             # MIT + research disclaimer
-└── README.md
+│   ├── diagrams/        # SVG architecture diagrams
+│   ├── research_notes/  # Per-phase findings
+│   └── TECHNICAL_REPORT.md
+├── assets/              # best_model.pth, class_mappings.json
+└── Dockerfile
 ```
 
 ---
 
-## Installation & Setup
+## Documentation
 
-### Prerequisites
-
-| Tool          | Version |
-| ------------- | ------- |
-| Python        | ≥ 3.10  |
-| Node.js       | ≥ 18.0  |
-| npm           | ≥ 9.0   |
-| Git + git-lfs | latest  |
-
-### 1. Clone
-
-```bash
-git clone https://github.com/AqibNiazi/ExplainPlan-Vision.git
-cd ExplainPlan-Vision
-```
-
-### 2. Backend
-
-```bash
-cd backend
-
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-
-pip install -r requirements.txt
-
-# Place trained weights
-cp ~/Downloads/best_model.pth      ../assets/best_model.pth
-cp ~/Downloads/class_mappings.json ../assets/class_mappings.json
-
-uvicorn backend.main:app --reload --port 8000
-# → http://localhost:8000/docs
-```
-
-### 3. Frontend
-
-```bash
-cd frontend
-npm install
-
-# Configure backend URL
-cp .env.example .env
-# VITE_API_URL=   (leave blank — Vite proxy handles dev)
-
-npm run dev
-# → http://localhost:5173
-```
-
-### 4. Training Notebook
-
-1. Upload the relevant notebook from `notebooks/` to Kaggle
-2. Attach the PlantVillage dataset
-3. Enable GPU (T4 recommended)
-4. Run all cells in order
-5. Download `best_model.pth` and `class_mappings.json` from `/kaggle/working/`
+| Document | Contents |
+|----------|----------|
+| [Technical Report](docs/TECHNICAL_REPORT.md) | Full academic write-up with related work, system design, equations, results, limitations |
+| [System Architecture](docs/architecture/system_overview.md) | Complete data-flow diagrams |
+| [API Design](docs/architecture/api_design.md) | All 8 endpoints with request/response schemas |
+| [Phase 1 Findings](docs/research_notes/phase1_findings.md) | Vision model results and per-class analysis |
+| [Phase 2 XAI Results](docs/research_notes/phase2_xai_results.md) | Grad-CAM vs SHAP vs LIME comparison |
+| [Phase 3 & 4 Results](docs/research_notes/phase3_phase4_results.md) | Planning engine and reasoning findings |
+| [Research Roadmap](docs/research_notes/phase_roadmap.md) | Phase 1–7 roadmap with Phase 6 LLM grounding design |
 
 ---
 
-## API Reference
+## Planned: Phase 6
 
-**Base URL (local):** `http://127.0.0.1:8000`  
-**Base URL (production):** `https://aqibniazi-explainplan-vision-api.hf.space`
+The next phase adds a **grounded LLM explanation layer**. The constraint that makes it research-grade:
 
-| Method   | Endpoint                  | Description                                       |
-| -------- | ------------------------- | ------------------------------------------------- |
-| `GET`    | `/api/v1/health`          | Server status, model loaded flag, device, version |
-| `POST`   | `/api/v1/predict`         | Classification only (no XAI)                      |
-| `POST`   | `/api/v1/explain`         | Grad-CAM++ only                                   |
-| `POST`   | `/api/v1/plan`            | Treatment plan only                               |
-| `POST`   | `/api/v1/full-analysis`   | **Complete 10-stage pipeline** ← primary endpoint |
-| `GET`    | `/api/v1/memory`          | Temporal memory state + trends                    |
-| `DELETE` | `/api/v1/memory`          | Clear temporal memory                             |
-| `GET`    | `/api/v1/knowledge-graph` | Knowledge graph metadata                          |
+> The LLM performs no reasoning. It only explains and reformulates — based on facts already verified by the symbolic engine.
 
-### `GET /api/v1/health`
-
-```json
-{
-  "status": "ok",
-  "version": "1.0.0",
-  "device": "cpu",
-  "model_loaded": true,
-  "num_classes": 15
-}
-```
-
-### `POST /api/v1/full-analysis`
-
-**Request:** `multipart/form-data` — field `file` (JPEG / PNG / WebP, max 10 MB)
-
-**Response (abbreviated):**
-
-```json
-{
-  "request_id": "uuid",
-  "processing_time_ms": 2143,
-  "prediction": {
-    "disease": "Tomato Late Blight",
-    "confidence": 0.974,
-    "severity": "high",
-    "is_healthy": false,
-    "top3": [...]
-  },
-  "xai": {
-    "gradcam_overlay_b64": "...",
-    "infection_spread": "widespread",
-    "focus_score": 0.723,
-    "activation_entropy": 1.241
-  },
-  "reasoning": {
-    "symbolic_facts": [...],
-    "urgency_level": "critical",
-    "urgency_score": 0.87,
-    "rules_fired": 14
-  },
-  "plan": {
-    "actions": [...],
-    "overall_urgency": "critical",
-    "escalation_flag": true
-  },
-  "counterfactuals": [...],
-  "explanations": {
-    "farmer": "...",
-    "agronomist": "...",
-    "researcher": "..."
-  },
-  "trend": {
-    "severity_trend": "worsening",
-    "urgency_trend": "worsening",
-    "disease_stable": true,
-    "n_observations": 3
-  }
-}
-```
-
-Full schema available at `/docs` (Swagger UI) and `/redoc`.
-
----
-
-## Deployment
-
-### Backend — HuggingFace Spaces (Docker)
-
-The backend is containerised with Docker and deployed on HuggingFace Spaces free tier (CPU Basic).
-
-```dockerfile
-FROM python:3.11-slim
-# ...
-EXPOSE 7860
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "7860"]
-```
-
-Model weights (`best_model.pth`, `class_mappings.json`) are committed to the Space repository under `assets/` and copied into the container at build time.
-
-**Startup time:** ~45 seconds (model loading on cold start). HuggingFace Spaces sleep after 48 hours of inactivity — the first request after sleep takes ~60s.
-
-### Frontend — Vercel
-
-```bash
-# Build
-cd frontend && npm run build
-
-# Set environment variable in Vercel dashboard:
-VITE_API_URL=https://aqibniazi-explainplan-vision-api.hf.space
-```
-
-### CORS
-
-Add your Vercel production domain to `backend/config.py`:
-
-```python
-cors_origins: List[str] = [
-    "http://localhost:5173",
-    "https://your-app.vercel.app",     # ← add this
-]
-```
-
----
-
-## Research Roadmap
-
-| Phase                        | Status      | Description                                        |
-| ---------------------------- | ----------- | -------------------------------------------------- |
-| 1 — Vision Foundation        | ✅ Complete | EfficientNet-B0, 15 classes, 96.8% accuracy        |
-| 2 — XAI                      | ✅ Complete | Grad-CAM++, spatial statistics                     |
-| 3 — Adaptive Planning        | ✅ Complete | 6-context plan engine, counterfactuals             |
-| 4 — Neuro-Symbolic Reasoning | ✅ Complete | KG inference, symbolic fact extraction             |
-| 5 — Full-Stack Application   | ✅ Complete | FastAPI backend, React frontend, Docker deployment |
-| 6 — LLM Grounding Layer      | 🔄 Planned  | Grounded LLM explanation, reasoning alignment eval |
-| 7 — Multi-Agent / PDDL       | 🔲 Future   | Formal planning integration                        |
-
-See [`docs/research_notes/phase_roadmap.md`](docs/research_notes/phase_roadmap.md) for detailed module descriptions.
+This prevents hallucination by construction. A planned reasoning alignment evaluation will compare symbolic vs LLM-generated explanations on factual consistency and hallucination rate — a potential paper contribution.
 
 ---
 
 ## Citation
 
-If you use this codebase or reference this work in your research, please cite:
-
 ```bibtex
 @software{explainplan_vision,
-  author    = {Niazi, Muhammad Aqib},
-  title     = {ExplainPlan Vision: An Explainable Neuro-Symbolic Visual
-               Planning Agent for Plant Disease Diagnosis},
-  year      = {2026},
-  url       = {https://github.com/AqibNiazi/ExplainPlan-Vision},
-  note      = {Software available at GitHub}
+  author = {Niazi, Muhammad Aqib},
+  title  = {ExplainPlan Vision: An Explainable Neuro-Symbolic Visual
+            Planning Agent for Plant Disease Diagnosis},
+  year   = {2026},
+  url    = {https://github.com/AqibNiazi/ExplainPlan-Vision}
 }
 ```
 
-**Referenced Works:**
-
-- Tan, M., & Le, Q. (2019). EfficientNet: Rethinking model scaling for convolutional neural networks. _ICML 2019_.
-- Chattopadhay, A., et al. (2018). Grad-CAM++: Improved visual explanations for deep convolutional networks. _WACV 2018_.
-- Selvaraju, R. R., et al. (2017). Grad-CAM: Visual explanations from deep networks. _ICCV 2017_.
-- Hughes, D., & Salathé, M. (2015). An open access repository of images on plant health to enable the development of mobile disease diagnostics. _arXiv:1511.08060_.
+**Key references:** Tan & Le (EfficientNet, ICML 2019) · Chattopadhay et al. (Grad-CAM++, WACV 2018) · Selvaraju et al. (Grad-CAM, ICCV 2017) · Hughes & Salathé (PlantVillage, arXiv 2015)
 
 ---
 
 ## License
 
-This project is licensed under the **MIT License** — see [`LICENSE`](LICENSE) for details.
-
-The PlantVillage dataset is subject to its own terms of use on Kaggle. This software must not be used for commercial agricultural advisory services without appropriate validation by a qualified agronomist.
+MIT — see [LICENSE](LICENSE). PlantVillage dataset subject to its own Kaggle terms.
 
 ---
 
 <div align="center">
 
-Built by **Muhammad Aqib Niazi**
-
-_If this project helped your research, please consider giving it a ⭐_
+Built by **Muhammad Aqib Niazi** — brick by brick, phase by phase.
 
 </div>
