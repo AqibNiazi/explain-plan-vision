@@ -26,8 +26,6 @@
 
 </div>
 
----
-
 ## What This Is
 
 Most plant disease AI systems stop at classification. Upload an image, get a label. This project goes further.
@@ -37,8 +35,6 @@ ExplainPlan Vision is a **neuro-symbolic reasoning agent** that takes a single l
 The system is built across five research phases completed over several months — from training the vision backbone on Kaggle to deploying the full stack on HuggingFace Spaces and Vercel. Every layer is custom-built: the reasoning engine, the knowledge graph, the planning engine, the counterfactual analyser, the temporal memory, and the three-audience explanation layer.
 
 > **Research disclaimer:** Developed for academic research. Treatment recommendations should be validated by a qualified agronomist before operational use.
-
----
 
 ## The Core Contribution
 
@@ -60,8 +56,6 @@ Treatment plan:            Step 1 [CRITICAL] Isolate affected plants...
 ```
 
 An agronomist can inspect the symbolic facts and verify each one against the leaf image — without understanding the neural network at all. Every treatment step traces back to the inference rule that triggered it, which traces back to the symbolic fact, which traces back to the neural confidence value. The chain is walkable in either direction.
-
----
 
 ## Screenshots
 
@@ -85,8 +79,6 @@ An agronomist can inspect the symbolic facts and verify each one against the lea
 <!-- Replace with actual screenshot -->
 ![Treatment Plan](docs/screenshots/treatment_plan.png)
 
----
-
 ## What One Analysis Returns
 
 A single POST to `/api/v1/full-analysis` runs ten stages and returns one JSON object:
@@ -105,7 +97,6 @@ A single POST to `/api/v1/full-analysis` runs ten stages and returns one JSON ob
 
 Everything above happens in approximately **2.1 seconds on CPU**.
 
----
 
 ## Results
 
@@ -119,7 +110,6 @@ Everything above happens in approximately **2.1 seconds on CPU**.
 | Grad-CAM / SHAP Agreement (Spearman r) | 0.74 |
 | Training Dataset | PlantVillage — 54,000 images, 15 classes |
 
----
 
 ## Research Phases
 
@@ -140,8 +130,6 @@ The grounding pipeline. Neural outputs converted to first-order logic predicates
 **Phase 5 — Full-Stack Deployment**
 FastAPI backend (8 endpoints, Pydantic v2, singleton orchestrator) deployed on HuggingFace Spaces via Docker. React 19 + Tailwind CSS 4 frontend deployed on Vercel. Temporal memory API with sliding-window trend detection across sessions.
 
----
-
 ## Tech Stack
 
 | Layer | Technology |
@@ -153,8 +141,6 @@ FastAPI backend (8 endpoints, Pydantic v2, singleton orchestrator) deployed on H
 | Frontend | React 19, Tailwind CSS 4, Vite, Recharts |
 | Deployment | Docker, HuggingFace Spaces, Vercel |
 | Training | Kaggle (GPU T4), PlantVillage dataset |
-
----
 
 ## Running Locally
 
@@ -180,8 +166,6 @@ cd frontend
 npm install && npm run dev
 # → http://localhost:5173
 ```
-
----
 
 ## Project Structure
 
@@ -211,8 +195,6 @@ ExplainPlan-Vision/
 └── Dockerfile
 ```
 
----
-
 ## Documentation
 
 | Document | Contents |
@@ -225,7 +207,6 @@ ExplainPlan-Vision/
 | [Phase 3 & 4 Results](docs/research_notes/phase3_phase4_results.md) | Planning engine and reasoning findings |
 | [Research Roadmap](docs/research_notes/phase_roadmap.md) | Phase 1–7 roadmap with Phase 6 LLM grounding design |
 
----
 
 ## Planned: Phase 6
 
@@ -233,9 +214,7 @@ The next phase adds a **grounded LLM explanation layer**. The constraint that ma
 
 > The LLM performs no reasoning. It only explains and reformulates — based on facts already verified by the symbolic engine.
 
-This prevents hallucination by construction. A planned reasoning alignment evaluation will compare symbolic vs LLM-generated explanations on factual consistency and hallucination rate — a potential paper contribution.
-
----
+This prevents hallucination by construction. A planned reasoning alignment evaluation will compare symbolic vs LLM-generated explanations on factual consistency and hallucination rate a potential paper contribution.
 
 ## Citation
 
@@ -251,16 +230,12 @@ This prevents hallucination by construction. A planned reasoning alignment evalu
 
 **Key references:** Tan & Le (EfficientNet, ICML 2019) · Chattopadhay et al. (Grad-CAM++, WACV 2018) · Selvaraju et al. (Grad-CAM, ICCV 2017) · Hughes & Salathé (PlantVillage, arXiv 2015)
 
----
-
 ## License
 
-MIT — see [LICENSE](LICENSE). PlantVillage dataset subject to its own Kaggle terms.
-
----
+MIT see [LICENSE](LICENSE). PlantVillage dataset subject to its own Kaggle terms.
 
 <div align="center">
 
-Built by **Muhammad Aqib Niazi** — brick by brick, phase by phase.
+Built by **Muhammad Aqib Niazi** Software Engineer, phase by phase.
 
 </div>
