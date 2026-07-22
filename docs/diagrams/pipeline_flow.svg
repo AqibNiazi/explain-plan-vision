@@ -1,0 +1,213 @@
+<svg viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg" font-family="'Courier New', monospace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#050810"/>
+      <stop offset="100%" stop-color="#090d1a"/>
+    </linearGradient>
+    <linearGradient id="cyanGreen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#00ff9d"/>
+    </linearGradient>
+    <linearGradient id="violetCyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7c4dff"/>
+      <stop offset="100%" stop-color="#00e5ff"/>
+    </linearGradient>
+    <marker id="arrC" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#00e5ff" opacity="0.8"/>
+    </marker>
+    <marker id="arrG" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#00ff9d" opacity="0.8"/>
+    </marker>
+    <marker id="arrV" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#7c4dff" opacity="0.8"/>
+    </marker>
+    <marker id="arrA" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#ffb300" opacity="0.8"/>
+    </marker>
+    <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="s"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="760" fill="url(#bg)"/>
+  <!-- Subtle grid -->
+  <g opacity="0.035" stroke="#00e5ff" stroke-width="0.5">
+    <line x1="0" y1="40" x2="1000" y2="40"/><line x1="0" y1="80" x2="1000" y2="80"/>
+    <line x1="0" y1="120" x2="1000" y2="120"/><line x1="0" y1="160" x2="1000" y2="160"/>
+    <line x1="0" y1="200" x2="1000" y2="200"/><line x1="0" y1="240" x2="1000" y2="240"/>
+    <line x1="0" y1="280" x2="1000" y2="280"/><line x1="0" y1="320" x2="1000" y2="320"/>
+    <line x1="0" y1="360" x2="1000" y2="360"/><line x1="0" y1="400" x2="1000" y2="400"/>
+    <line x1="0" y1="440" x2="1000" y2="440"/><line x1="0" y1="480" x2="1000" y2="480"/>
+    <line x1="0" y1="520" x2="1000" y2="520"/><line x1="0" y1="560" x2="1000" y2="560"/>
+    <line x1="0" y1="600" x2="1000" y2="600"/><line x1="0" y1="640" x2="1000" y2="640"/>
+    <line x1="0" y1="680" x2="1000" y2="680"/><line x1="0" y1="720" x2="1000" y2="720"/>
+    <line x1="80" y1="0" x2="80" y2="760"/><line x1="160" y1="0" x2="160" y2="760"/>
+    <line x1="240" y1="0" x2="240" y2="760"/><line x1="320" y1="0" x2="320" y2="760"/>
+    <line x1="400" y1="0" x2="400" y2="760"/><line x1="480" y1="0" x2="480" y2="760"/>
+    <line x1="560" y1="0" x2="560" y2="760"/><line x1="640" y1="0" x2="640" y2="760"/>
+    <line x1="720" y1="0" x2="720" y2="760"/><line x1="800" y1="0" x2="800" y2="760"/>
+    <line x1="880" y1="0" x2="880" y2="760"/><line x1="960" y1="0" x2="960" y2="760"/>
+  </g>
+
+  <!-- ── TITLE ── -->
+  <text x="500" y="30" text-anchor="middle" fill="#00e5ff" font-size="11" letter-spacing="7" filter="url(#glow)">EXPLAINPLAN VISION — FULL INFERENCE PIPELINE</text>
+  <line x1="60" y1="42" x2="940" y2="42" stroke="#00e5ff" stroke-width="0.5" opacity="0.35"/>
+
+  <!-- ══ LEFT COLUMN — main flow ══ -->
+
+  <!-- INPUT -->
+  <rect x="60" y="56" width="270" height="50" fill="rgba(0,229,255,0.07)" stroke="#00e5ff" stroke-width="1.5" filter="url(#s)"/>
+  <text x="195" y="75" text-anchor="middle" fill="#00e5ff" font-size="8" letter-spacing="3">INPUT</text>
+  <text x="195" y="95" text-anchor="middle" fill="#e8f0fe" font-size="12" font-weight="bold">Leaf Image</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="106" x2="195" y2="124" stroke="#00e5ff" stroke-width="1.5" marker-end="url(#arrC)" opacity="0.7"/>
+
+  <!-- STAGE 01 -->
+  <rect x="60" y="128" width="270" height="62" fill="rgba(0,229,255,0.05)" stroke="#00e5ff" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="128" width="4" height="62" fill="url(#cyanGreen)"/>
+  <text x="76" y="146" fill="#00e5ff" font-size="7" letter-spacing="2">01 — VISION ENGINE</text>
+  <text x="76" y="163" fill="#e8f0fe" font-size="11" font-weight="bold">EfficientNet-B0</text>
+  <text x="76" y="178" fill="#8899bb" font-size="8">15 classes · Top-1: 96.8% · confidence + severity</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="190" x2="195" y2="208" stroke="#00e5ff" stroke-width="1.5" marker-end="url(#arrC)" opacity="0.7"/>
+
+  <!-- STAGE 02 -->
+  <rect x="60" y="212" width="270" height="62" fill="rgba(0,255,157,0.04)" stroke="#00ff9d" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="212" width="4" height="62" fill="#00ff9d"/>
+  <text x="76" y="230" fill="#00ff9d" font-size="7" letter-spacing="2">02 — XAI ENGINE</text>
+  <text x="76" y="247" fill="#e8f0fe" font-size="11" font-weight="bold">Grad-CAM++</text>
+  <text x="76" y="262" fill="#8899bb" font-size="8">Heatmap · focus_score · entropy · infection_spread</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="274" x2="195" y2="292" stroke="#00ff9d" stroke-width="1.5" marker-end="url(#arrG)" opacity="0.7"/>
+
+  <!-- STAGE 03 -->
+  <rect x="60" y="296" width="270" height="62" fill="rgba(124,77,255,0.05)" stroke="#7c4dff" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="296" width="4" height="62" fill="#7c4dff"/>
+  <text x="76" y="314" fill="#7c4dff" font-size="7" letter-spacing="2">03 — SYMBOLIC GROUNDING</text>
+  <text x="76" y="331" fill="#e8f0fe" font-size="11" font-weight="bold">Fact Extraction</text>
+  <text x="76" y="346" fill="#8899bb" font-size="8">Neural → First-order logic predicates + confidence</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="358" x2="195" y2="376" stroke="#7c4dff" stroke-width="1.5" marker-end="url(#arrV)" opacity="0.7"/>
+
+  <!-- STAGE 04 -->
+  <rect x="60" y="380" width="270" height="62" fill="rgba(255,179,0,0.04)" stroke="#ffb300" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="380" width="4" height="62" fill="#ffb300"/>
+  <text x="76" y="398" fill="#ffb300" font-size="7" letter-spacing="2">04 — KG INFERENCE</text>
+  <text x="76" y="415" fill="#e8f0fe" font-size="11" font-weight="bold">NetworkX Knowledge Graph</text>
+  <text x="76" y="430" fill="#8899bb" font-size="8">20+ rules · urgency · spread_risk · treatment_class</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="442" x2="195" y2="460" stroke="#ffb300" stroke-width="1.5" marker-end="url(#arrA)" opacity="0.7"/>
+
+  <!-- STAGE 05+06 -->
+  <rect x="60" y="464" width="270" height="62" fill="rgba(255,179,0,0.04)" stroke="#ffb300" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="464" width="4" height="62" fill="#ffb300"/>
+  <text x="76" y="482" fill="#ffb300" font-size="7" letter-spacing="2">05+06 — TEMPORAL MEMORY + PLANNING</text>
+  <text x="76" y="499" fill="#e8f0fe" font-size="11" font-weight="bold">Adaptive Plan</text>
+  <text x="76" y="514" fill="#8899bb" font-size="8">6 context mechanisms · trend-aware · numbered steps</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="526" x2="195" y2="544" stroke="#ffb300" stroke-width="1.5" marker-end="url(#arrA)" opacity="0.7"/>
+
+  <!-- STAGE 09 -->
+  <rect x="60" y="548" width="270" height="62" fill="rgba(0,255,157,0.04)" stroke="#00ff9d" stroke-width="1.5" filter="url(#s)"/>
+  <rect x="60" y="548" width="4" height="62" fill="#00ff9d"/>
+  <text x="76" y="566" fill="#00ff9d" font-size="7" letter-spacing="2">09 — HUMAN EXPLANATIONS</text>
+  <text x="76" y="583" fill="#e8f0fe" font-size="11" font-weight="bold">Adaptive Narratives</text>
+  <text x="76" y="598" fill="#8899bb" font-size="8">Farmer · Agronomist · Researcher</text>
+
+  <!-- ↓ -->
+  <line x1="195" y1="610" x2="195" y2="628" stroke="#00e5ff" stroke-width="1.5" marker-end="url(#arrC)" opacity="0.7"/>
+
+  <!-- OUTPUT -->
+  <rect x="60" y="632" width="270" height="50" fill="rgba(0,229,255,0.07)" stroke="url(#cyanGreen)" stroke-width="2" filter="url(#s)"/>
+  <text x="195" y="652" text-anchor="middle" fill="#00e5ff" font-size="7" letter-spacing="3">OUTPUT</text>
+  <text x="195" y="670" text-anchor="middle" fill="#e8f0fe" font-size="11" font-weight="bold">Unified JSON Response</text>
+
+  <!-- ══ MIDDLE COLUMN — data artifacts flowing out ══ -->
+
+  <!-- Horizontal connector from stage 01 -->
+  <line x1="330" y1="159" x2="380" y2="159" stroke="#00e5ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <rect x="382" y="140" width="220" height="38" fill="rgba(0,229,255,0.04)" stroke="#00e5ff" stroke-width="0.8" opacity="0.7"/>
+  <text x="492" y="156" text-anchor="middle" fill="#00e5ff" font-size="7">confidence: 0.974 · severity: high</text>
+  <text x="492" y="170" text-anchor="middle" fill="#8899bb" font-size="7">top-3: Late Blight, Early Blight, Leaf Mold</text>
+
+  <!-- Horizontal connector from stage 02 -->
+  <line x1="330" y1="243" x2="380" y2="243" stroke="#00ff9d" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <rect x="382" y="224" width="220" height="38" fill="rgba(0,255,157,0.04)" stroke="#00ff9d" stroke-width="0.8" opacity="0.7"/>
+  <text x="492" y="240" text-anchor="middle" fill="#00ff9d" font-size="7">spread: widespread · focus: 0.723</text>
+  <text x="492" y="254" text-anchor="middle" fill="#8899bb" font-size="7">entropy: 1.241 · heatmap_b64: PNG</text>
+
+  <!-- Horizontal connector from stage 03 -->
+  <line x1="330" y1="327" x2="380" y2="327" stroke="#7c4dff" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <rect x="382" y="308" width="220" height="38" fill="rgba(124,77,255,0.04)" stroke="#7c4dff" stroke-width="0.8" opacity="0.7"/>
+  <text x="492" y="324" text-anchor="middle" fill="#7c4dff" font-size="7">disease_detected(late_blight) 0.97</text>
+  <text x="492" y="338" text-anchor="middle" fill="#8899bb" font-size="7">severity(high) · spread(widespread)</text>
+
+  <!-- Horizontal connector from stage 04 -->
+  <line x1="330" y1="411" x2="380" y2="411" stroke="#ffb300" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <rect x="382" y="392" width="220" height="38" fill="rgba(255,179,0,0.04)" stroke="#ffb300" stroke-width="0.8" opacity="0.7"/>
+  <text x="492" y="408" text-anchor="middle" fill="#ffb300" font-size="7">urgency: critical · score: 0.87</text>
+  <text x="492" y="422" text-anchor="middle" fill="#8899bb" font-size="7">treatment: fungicide · rules_fired: 14</text>
+
+  <!-- Horizontal connector from stage 05+06 -->
+  <line x1="330" y1="495" x2="380" y2="495" stroke="#ffb300" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <rect x="382" y="476" width="220" height="38" fill="rgba(255,179,0,0.04)" stroke="#ffb300" stroke-width="0.8" opacity="0.7"/>
+  <text x="492" y="492" text-anchor="middle" fill="#ffb300" font-size="7">8 steps · escalation_flag: true</text>
+  <text x="492" y="506" text-anchor="middle" fill="#8899bb" font-size="7">monitor: daily · trend: worsening</text>
+
+  <!-- ══ RIGHT COLUMN — parallel stages 07+08 ══ -->
+
+  <!-- Bracket from stage 05+06 right side -->
+  <line x1="330" y1="490" x2="360" y2="490" stroke="#7c4dff" stroke-width="1" opacity="0.5"/>
+  <line x1="360" y1="490" x2="360" y2="580" stroke="#7c4dff" stroke-width="1" opacity="0.5"/>
+  <line x1="360" y1="545" x2="380" y2="545" stroke="#7c4dff" stroke-width="1" opacity="0.5"/>
+  <line x1="360" y1="580" x2="620" y2="580" stroke="#7c4dff" stroke-width="1" opacity="0.4"/>
+
+  <!-- Stage 07 -->
+  <rect x="620" y="460" width="220" height="62" fill="rgba(124,77,255,0.05)" stroke="#7c4dff" stroke-width="1.2"/>
+  <rect x="620" y="460" width="3" height="62" fill="#7c4dff"/>
+  <text x="634" y="477" fill="#7c4dff" font-size="7" letter-spacing="2">07 — COUNTERFACTUALS</text>
+  <text x="634" y="493" fill="#e8f0fe" font-size="10" font-weight="bold">4 Scenarios</text>
+  <text x="634" y="508" fill="#8899bb" font-size="7">early_detection · isolated · critical</text>
+  <text x="634" y="520" fill="#8899bb" font-size="7">plan_delta per scenario</text>
+
+  <!-- Stage 08 -->
+  <rect x="620" y="544" width="220" height="62" fill="rgba(0,229,255,0.04)" stroke="#00e5ff" stroke-width="1.2"/>
+  <rect x="620" y="544" width="3" height="62" fill="#00e5ff"/>
+  <text x="634" y="561" fill="#00e5ff" font-size="7" letter-spacing="2">08 — DECISION TREE</text>
+  <text x="634" y="577" fill="#e8f0fe" font-size="10" font-weight="bold">Probabilistic Look-ahead</text>
+  <text x="634" y="592" fill="#8899bb" font-size="7">State transitions · expected_urgency</text>
+  <text x="634" y="604" fill="#8899bb" font-size="7">leaf-weighted average</text>
+
+  <!-- Lines from 07+08 into output -->
+  <line x1="840" y1="491" x2="870" y2="491" stroke="#7c4dff" stroke-width="1" opacity="0.4"/>
+  <line x1="840" y1="575" x2="870" y2="575" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+  <line x1="870" y1="491" x2="870" y2="657" stroke="#00e5ff" stroke-width="1" opacity="0.4" stroke-dasharray="3,2"/>
+  <line x1="870" y1="657" x2="840" y2="657" stroke="#00e5ff" stroke-width="1" marker-end="url(#arrC)" opacity="0.4"/>
+
+  <!-- ══ LEGEND ══ -->
+  <rect x="620" y="640" width="320" height="100" fill="rgba(0,0,0,0.3)" stroke="#00e5ff" stroke-width="0.6" opacity="0.7"/>
+  <text x="780" y="656" text-anchor="middle" fill="#4a5568" font-size="7" letter-spacing="2">LEGEND</text>
+  <rect x="636" y="664" width="10" height="10" fill="rgba(0,229,255,0.3)" stroke="#00e5ff" stroke-width="1"/>
+  <text x="652" y="673" fill="#8899bb" font-size="7">Vision / Output stages</text>
+  <rect x="636" y="682" width="10" height="10" fill="rgba(0,255,157,0.3)" stroke="#00ff9d" stroke-width="1"/>
+  <text x="652" y="691" fill="#8899bb" font-size="7">XAI / Explanation stages</text>
+  <rect x="636" y="700" width="10" height="10" fill="rgba(124,77,255,0.3)" stroke="#7c4dff" stroke-width="1"/>
+  <text x="652" y="709" fill="#8899bb" font-size="7">Symbolic reasoning stages</text>
+  <rect x="636" y="718" width="10" height="10" fill="rgba(255,179,0,0.3)" stroke="#ffb300" stroke-width="1"/>
+  <text x="652" y="727" fill="#8899bb" font-size="7">Planning stages</text>
+  <line x1="760" y1="668" x2="790" y2="668" stroke="#00e5ff" stroke-width="1" stroke-dasharray="3,2" opacity="0.7"/>
+  <text x="796" y="672" fill="#8899bb" font-size="7">Data artifact</text>
+  <line x1="760" y1="684" x2="790" y2="684" stroke="#00e5ff" stroke-width="1.5" marker-end="url(#arrC)" opacity="0.7"/>
+  <text x="796" y="688" fill="#8899bb" font-size="7">Control flow</text>
+
+  <!-- bottom credits -->
+  <line x1="60" y1="710" x2="940" y2="710" stroke="#00e5ff" stroke-width="0.4" opacity="0.2"/>
+  <text x="500" y="730" text-anchor="middle" fill="#4a5568" font-size="7" letter-spacing="3">EfficientNet-B0 · Grad-CAM++ · NetworkX KG · FastAPI · React 19</text>
+  <text x="500" y="746" text-anchor="middle" fill="#4a5568" font-size="7">Muhammad Aqib Niazi  ·  ExplainPlan Vision  ·  2026</text>
+</svg>
