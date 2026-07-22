@@ -3,8 +3,6 @@
 All notable changes to ExplainPlan Vision are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
----
-
 ## [1.0.0] — 2026-06 — Full-Stack Production Release
 
 ### Added — Phase 5: Deployment
@@ -24,8 +22,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `gcc` missing for `stringzilla` (albumentations dependency) → added to apt step
 - assets/ folder not copied into Docker image → added `COPY --chown=user assets/`
 
----
-
 ## [0.4.0] — 2026-05 — Phase 4: Neuro-Symbolic Reasoning
 
 ### Added
@@ -38,8 +34,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `severity_trend`, `urgency_trend`, `spread_trend` fields
 - `monitoring_interval` recommendation based on trend
 
----
-
 ## [0.3.0] — 2026-04 — Phase 3: Adaptive Planning
 
 ### Added
@@ -49,8 +43,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Counterfactual analysis: 4 scenarios with `plan_delta` and `cf_urgency`
 - Probabilistic decision tree look-ahead with `expected_urgency` scalar
 - `monitoring_interval` field in plan response
-
----
 
 ## [0.2.0] — 2026-03 — Phase 2: Explainability
 
@@ -63,7 +55,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `register_full_backward_hook` throughout — avoids PyTorch 2.x deprecation warning
 - Hook cleanup in `finally` blocks to prevent state leakage between requests
 
----
 
 ## [0.1.0] — 2026-02 — Phase 1: Vision Foundation
 
