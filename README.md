@@ -30,11 +30,9 @@
 
 Most plant disease AI systems stop at classification. Upload an image, get a label. This project goes further.
 
-ExplainPlan Vision is a **neuro-symbolic reasoning agent** that takes a single leaf photograph and produces: a disease diagnosis, a spatial explanation of *where* on the leaf the evidence was found, a symbolic reasoning trace showing *why* that evidence implies a specific treatment, and an adaptive, step-numbered treatment plan — all in a single API call, in about 2 seconds, on a CPU.
+ExplainPlan Vision is a **neuro-symbolic reasoning agent** that takes a single leaf photograph and produces: a disease diagnosis, a spatial explanation of *where* on the leaf the evidence was found, a symbolic reasoning trace showing *why* that evidence implies a specific treatment, and an adaptive, step-numbered treatment plan all in a single API call, in about 2 seconds, on a CPU.
 
-The system is built across five research phases completed over several months — from training the vision backbone on Kaggle to deploying the full stack on HuggingFace Spaces and Vercel. Every layer is custom-built: the reasoning engine, the knowledge graph, the planning engine, the counterfactual analyser, the temporal memory, and the three-audience explanation layer.
-
-> **Research disclaimer:** Developed for academic research. Treatment recommendations should be validated by a qualified agronomist before operational use.
+The system is built across five research phases completed over several months from training the vision backbone on Kaggle to deploying the full stack on HuggingFace Spaces and Vercel. Every layer is custom-built: the reasoning engine, the knowledge graph, the planning engine, the counterfactual analyser, the temporal memory, and the three-audience explanation layer.
 
 ## The Core Contribution
 
@@ -55,7 +53,7 @@ Treatment plan:            Step 1 [CRITICAL] Isolate affected plants...
                            Step 2 [HIGH]     Apply copper-based fungicide...
 ```
 
-An agronomist can inspect the symbolic facts and verify each one against the leaf image — without understanding the neural network at all. Every treatment step traces back to the inference rule that triggered it, which traces back to the symbolic fact, which traces back to the neural confidence value. The chain is walkable in either direction.
+An agronomist can inspect the symbolic facts and verify each one against the leaf image without understanding the neural network at all. Every treatment step traces back to the inference rule that triggered it, which traces back to the symbolic fact, which traces back to the neural confidence value. The chain is walkable in either direction.
 
 ## Screenshots
 
@@ -108,7 +106,7 @@ Everything above happens in approximately **2.1 seconds on CPU**.
 | Model Parameters | 5.3M (EfficientNet-B0) |
 | Knowledge Graph Rules | 20+ inference rules |
 | Grad-CAM / SHAP Agreement (Spearman r) | 0.74 |
-| Training Dataset | PlantVillage — 54,000 images, 15 classes |
+| Training Dataset | PlantVillage 54,000 images, 15 classes |
 
 
 ## Research Phases
@@ -119,13 +117,13 @@ This project was built in five sequential research phases, each with its own Kag
 EfficientNet-B0 fine-tuned on PlantVillage. Selected over ResNet50 for 5× lower parameter count (5.3M vs 25.6M), making CPU deployment viable. Calibrated confidence outputs designed specifically for downstream symbolic grounding.
 
 **Phase 2 — Explainability Engine**
-Three XAI methods implemented and compared: Grad-CAM++ (deployed), SHAP GradientExplainer (notebook), LIME (notebook). Spatial statistics extracted from heatmaps — focus score, activation entropy, infection spread — feed directly into the Phase 4 reasoning engine as symbolic facts. Grad-CAM / SHAP agreement measured with Spearman correlation (r = 0.74) to validate spatial consistency across methods.
+Three XAI methods implemented and compared: Grad-CAM++ (deployed), SHAP GradientExplainer (notebook), LIME (notebook). Spatial statistics extracted from heatmaps focus score, activation entropy, infection spread feed directly into the Phase 4 reasoning engine as symbolic facts. Grad-CAM / SHAP agreement measured with Spearman correlation (r = 0.74) to validate spatial consistency across methods.
 
 **Phase 3 — Adaptive Planning**
-Six-context treatment plan engine. Plans are not templates — they adapt simultaneously to disease type, infection spread, urgency score, seasonal conditions, severity level, and temporal trend. Four counterfactual scenarios quantify the cost of delayed intervention (plan delta in step count). Probabilistic decision tree computes expected urgency via leaf-weighted averaging.
+Six-context treatment plan engine. Plans are not templates they adapt simultaneously to disease type, infection spread, urgency score, seasonal conditions, severity level, and temporal trend. Four counterfactual scenarios quantify the cost of delayed intervention (plan delta in step count). Probabilistic decision tree computes expected urgency via leaf-weighted averaging.
 
 **Phase 4 — Neuro-Symbolic Reasoning**
-The grounding pipeline. Neural outputs converted to first-order logic predicates before inference. NetworkX knowledge graph with 20+ rules derives urgency, treatment class, isolation requirements. Three audience-specific natural language explanations grounded in the verified reasoning trace — not generated from scratch.
+The grounding pipeline. Neural outputs converted to first-order logic predicates before inference. NetworkX knowledge graph with 20+ rules derives urgency, treatment class, isolation requirements. Three audience-specific natural language explanations grounded in the verified reasoning trace not generated from scratch.
 
 **Phase 5 — Full-Stack Deployment**
 FastAPI backend (8 endpoints, Pydantic v2, singleton orchestrator) deployed on HuggingFace Spaces via Docker. React 19 + Tailwind CSS 4 frontend deployed on Vercel. Temporal memory API with sliding-window trend detection across sessions.
@@ -212,7 +210,7 @@ ExplainPlan-Vision/
 
 The next phase adds a **grounded LLM explanation layer**. The constraint that makes it research-grade:
 
-> The LLM performs no reasoning. It only explains and reformulates — based on facts already verified by the symbolic engine.
+> The LLM performs no reasoning. It only explains and reformulates based on facts already verified by the symbolic engine.
 
 This prevents hallucination by construction. A planned reasoning alignment evaluation will compare symbolic vs LLM-generated explanations on factual consistency and hallucination rate a potential paper contribution.
 
@@ -236,6 +234,6 @@ MIT see [LICENSE](LICENSE). PlantVillage dataset subject to its own Kaggle terms
 
 <div align="center">
 
-Built by **Muhammad Aqib Niazi** Software Engineer, phase by phase.
+Built by **Muhammad Aqib Niazi** Software Engineer from **UET TAXILA**.
 
 </div>
