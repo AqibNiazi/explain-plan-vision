@@ -5,8 +5,6 @@
 **OpenAPI / Swagger:** `/docs`  
 **ReDoc:** `/redoc`
 
----
-
 ## Design Principles
 
 1. **Single-call full pipeline.** The primary endpoint `/api/v1/full-analysis` returns all 10 stages in one response. Clients do not need to chain multiple calls.
@@ -16,8 +14,6 @@
 3. **Pydantic v2 schemas everywhere.** All request and response bodies are validated by Pydantic v2 models. The `/docs` endpoint shows the complete schema.
 
 4. **Singleton orchestrator.** All engines are initialised once at startup. Per-request latency is dominated by inference (~2.1s), not initialisation.
-
----
 
 ## Endpoint Reference
 
@@ -35,8 +31,6 @@ Returns server liveness, model status, device, and API version.
   "num_classes": 15
 }
 ```
-
----
 
 ### `POST /api/v1/full-analysis` ← Primary Endpoint
 
@@ -136,15 +130,11 @@ Returns server liveness, model status, device, and API version.
 }
 ```
 
----
-
 ### `POST /api/v1/predict`
 
 Classification only. Skips XAI, reasoning, and planning. Useful for high-throughput batch screening.
 
 **Response:** `prediction` field only (same schema as above).
-
----
 
 ### `POST /api/v1/explain`
 
@@ -152,13 +142,9 @@ Grad-CAM++ only. Returns heatmap and spatial statistics.
 
 **Response:** `xai` field only.
 
----
-
 ### `POST /api/v1/plan`
 
 Full pipeline minus `/predict` — assumes classification result is passed. Returns reasoning + plan.
-
----
 
 ### `GET /api/v1/memory`
 
@@ -175,19 +161,15 @@ Temporal memory state — all observations stored for current session.
 }
 ```
 
----
-
 ### `DELETE /api/v1/memory`
 
 Clears the temporal memory store. Used when starting analysis of a new plant.
 
----
 
 ### `GET /api/v1/knowledge-graph`
 
 Returns knowledge graph metadata: node count, edge count, disease nodes, rule count.
 
----
 
 ## Error Responses
 
