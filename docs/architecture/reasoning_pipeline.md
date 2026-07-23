@@ -1,4 +1,4 @@
-# Reasoning Pipeline — ExplainPlan Vision
+# Reasoning Pipeline ExplainPlan Vision
 
 ## Overview
 
@@ -27,8 +27,6 @@ Grad-CAM++       ──────────► (predicate + arguments + conf
               Generator           Engine
 ```
 
----
-
 ## Stage 1 — Symbolic Fact Extraction
 
 Neural outputs are converted into discrete, verifiable symbolic facts.
@@ -53,8 +51,6 @@ Confidence thresholds for discretisation:
 - `severity_level`: high ≥ 0.75 / medium ≥ 0.45 / low < 0.45
 - `infection_spread`: direct from GradCAM spatial statistics
 
----
-
 ## Stage 2 — Knowledge Graph
 
 Built with NetworkX at startup, held in memory for zero per-request init cost.
@@ -67,8 +63,6 @@ Built with NetworkX at startup, held in memory for zero per-request init cost.
 | Inference rules | 20+ |
 
 Node types: DiseaseClass, DiseaseType, TreatmentClass, SeverityLevel, UrgencyLevel, SpreadPattern
-
----
 
 ## Stage 3 — Inference Rules (Selected)
 
@@ -103,8 +97,6 @@ trend(worsening) → escalation_flag(true) ∧ monitoring(daily)
 trend(improving) → monitoring(bi-weekly)
 ```
 
----
-
 ## Stage 4 — Confidence Propagation
 
 Multiplicative model through inference chains:
@@ -117,8 +109,6 @@ Example:
 ```
 
 **Known limitation:** Multiplicative propagation underestimates confidence when antecedents are correlated. A Bayesian network would handle this correctly and is a planned Phase 7 improvement.
-
----
 
 ## Reasoning Trace — API Response Shape
 
@@ -136,4 +126,4 @@ Example:
 }
 ```
 
-Every field traces back to a specific rule or grounding function — full auditability without inspecting the neural network.
+Every field traces back to a specific rule or grounding function full auditability without inspecting the neural network.

@@ -17,8 +17,6 @@ Developer pushes to GitHub
                 └── uvicorn backend.main:app --port 7860
 ```
 
----
-
 ## Frontend — Vercel
 
 ### Stack
@@ -57,7 +55,6 @@ server: {
 
 In production, Axios calls go directly to `VITE_API_URL` (the HuggingFace Space URL), so CORS must be configured on the backend.
 
----
 
 ## Backend — HuggingFace Spaces (Docker)
 
@@ -132,8 +129,6 @@ cors_origins: List[str] = [
 
 **Important:** Remove `"*"` from cors_origins in production. Wildcard CORS on a public API is a security risk.
 
----
-
 ## CI/CD Flow
 
 ```
@@ -148,8 +143,6 @@ git push origin main (GitHub)
 
 No manual deployment steps after initial setup.
 
----
-
 ## Environment Variables Reference
 
 | Variable | Where Set | Value (Production) |
@@ -161,7 +154,6 @@ No manual deployment steps after initial setup.
 | `EP_LOG_LEVEL` | Dockerfile ENV | `INFO` |
 | `HF_MODEL_REPO` | HF Space secrets (optional) | `aqibniazi/explainplan-vision-weights` |
 
----
 
 ## Known Deployment Constraints
 
