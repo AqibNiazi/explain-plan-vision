@@ -5,13 +5,10 @@
 **Platform:** Kaggle (GPU T4)  
 **Dataset:** PlantVillage (~54,000 leaf images, 15 classes)
 
----
 
 ## Objective
 
-Establish a reliable deep learning classifier for plant leaf disease that achieves sufficient accuracy to serve as the evidence base for downstream symbolic reasoning. The goal was not maximum accuracy in isolation, but accuracy *with calibrated confidence* — the downstream reasoning engine requires reliable confidence values, not just correct top-1 predictions.
-
----
+Establish a reliable deep learning classifier for plant leaf disease that achieves sufficient accuracy to serve as the evidence base for downstream symbolic reasoning. The goal was not maximum accuracy in isolation, but accuracy *with calibrated confidence* the downstream reasoning engine requires reliable confidence values, not just correct top-1 predictions.
 
 ## Model Selection Rationale
 
@@ -28,7 +25,6 @@ The parameter reduction from 25.6M → 5.3M was decisive for the deployment cons
 
 **Transfer learning rationale:** ImageNet pre-training provides general visual features (edges, textures, colour gradients) that transfer well to leaf texture and disease lesion patterns, even though the domains differ significantly.
 
----
 
 ## Training Configuration
 
@@ -47,8 +43,6 @@ batch_size = 32
 - RandomHorizontalFlip (p=0.5)
 - RandomRotation(±15°)
 - ColorJitter(brightness=0.2, contrast=0.2)
-
----
 
 ## Results
 
@@ -82,15 +76,11 @@ batch_size = 32
 
 **Observation 3 — Within-species confusion exists.** Tomato Leaf Mold and Tomato Early Blight share overlapping visual features under certain lighting conditions. In these cases, the top-3 output captures both, and the counterfactual engine provides scenario analysis for the alternative diagnosis.
 
----
-
 ## Implications for Downstream Stages
 
 - Confidence is used as a direct input to symbolic fact extraction (Stage 03). A confidence of 0.97 produces a `confidence_level(high)` fact; 0.72 would produce `confidence_level(medium)`.
 - The `is_healthy` flag from Stage 01 bypasses the full reasoning pipeline if true — the system returns a wellness plan rather than a treatment plan.
 - Top-3 alternatives are passed to the counterfactual engine to support the `early_detection` scenario.
-
----
 
 ## Files Produced
 
